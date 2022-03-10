@@ -1,0 +1,29 @@
+{
+  "name": "@liquidvoice/algo",
+  "version": "0.0.0",
+  "description": "The raw algorithm for consolidating liquid votes",
+  "author": "Aster Haven <asterhaven@pm.me> (@therebelrobot)",
+  "homepage": "https://github.com/therebelrobot/liquidvoice#readme",
+  "license": "MIT",
+  "main": "lib/algo.js",
+  "directories": {
+    "lib": "lib",
+    "test": "src/tests"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.yarnpkg.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/therebelrobot/liquidvoice.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/therebelrobot/liquidvoice/issues"
+  }
+}
