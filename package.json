@@ -1,0 +1,11 @@
+{
+  "name": "liquidvoice",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "ssh://git@github.com/therebelrobot/liquidvoice.git",
+  "author": "Aster Haven (@therebelrobot) <asterhaven@pm.me>",
+  "license": "MIT",
+  "dependencies": {
+    "lerna": "^4.0.0"
+  }
+}
