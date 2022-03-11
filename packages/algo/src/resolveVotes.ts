@@ -50,10 +50,8 @@ export const resolveVotes = (userVotes: UserVote[]): AlgoReturnValue => {
       const currentVotes = finalVotesMap.get(0) || [];
       currentVotes.push(userVote.userId);
       enrichedUserVote.vote = 0;
-      enrichedUserVote.votePower = 1;
       finalVotesMap.set(0, currentVotes);
     }
-    enrichedUserVote.votePower = 1;
     votesMap.set(userVote.userId, enrichedUserVote);
   }
   const refinedProxies = new Map<string, string[]>();
@@ -73,8 +71,6 @@ export const resolveVotes = (userVotes: UserVote[]): AlgoReturnValue => {
             proxyId,
             ...(thisProxy.delegateMap || []),
           ];
-          thisProxy.votePower = thisProxy.votePower || 1;
-          thisProxy.votePower += thisVote.delegateMap.length;
           votesMap.set(voterId, thisVote);
           votesMap.set(proxyId, thisProxy);
         }
@@ -86,6 +82,8 @@ export const resolveVotes = (userVotes: UserVote[]): AlgoReturnValue => {
     }
   }
   const refinedDelegateIds = Array.from(refinedProxies.keys());
+
+  // collapse nested proxies
   for (const delegateId of refinedDelegateIds) {
     const thisDelegateVote = votesMap.get(delegateId);
     const thisDelegateVoterIds = refinedProxies.get(delegateId);
@@ -113,8 +111,6 @@ export const resolveVotes = (userVotes: UserVote[]): AlgoReturnValue => {
           delegateId,
           ...(thisProxy.delegateMap || []),
         ];
-        thisProxy.votePower = thisProxy.votePower || 1;
-        thisProxy.votePower += thisVote.delegateMap.length;
         votesMap.set(voterId, thisVote);
         votesMap.set(delegateId, thisProxy);
       }
@@ -123,6 +119,17 @@ export const resolveVotes = (userVotes: UserVote[]): AlgoReturnValue => {
       }
       votesMap.set(voterId, thisVote);
     }
+  }
+
+  // calculate vote power
+  const loopableVotes = Array.from(votesMap.values());
+  for (const userVote of loopableVotes) {
+    const thisVote = votesMap.get(userVote.userId);
+    const usersListingAsDelegate = loopableVotes.filter(
+      (v) => v.delegateMap && v.delegateMap.includes(userVote.userId)
+    );
+    thisVote.votePower = usersListingAsDelegate.length + 1;
+    votesMap.set(userVote.userId, thisVote);
   }
   return {
     finalTally: Object.fromEntries(finalVotesMap),

@@ -24,14 +24,17 @@ export const basicVoteResults: AlgoReturnValue = {
     user1: {
       userId: "user1",
       vote: 1,
+      votePower: 1,
     },
     user2: {
       userId: "user2",
       vote: 2,
+      votePower: 1,
     },
     user3: {
       userId: "user3",
       vote: 1,
+      votePower: 1,
     },
   },
 };
@@ -62,16 +65,19 @@ export const basicDelegateVoteResults: AlgoReturnValue = {
     user1: {
       userId: "user1",
       vote: 1,
+      votePower: 1,
     },
     user2: {
       userId: "user2",
       vote: 2,
+      votePower: 2,
     },
     user3: {
       userId: "user3",
       vote: 2,
       delegateId: "user2",
       delegateMap: ["user2"],
+      votePower: 1,
     },
   },
 };
@@ -106,22 +112,26 @@ export const nestedDelegateVoteResults: AlgoReturnValue = {
     user1: {
       userId: "user1",
       vote: 1,
+      votePower: 1,
     },
     user2: {
       userId: "user2",
       vote: 2,
       delegateId: "user4",
       delegateMap: ["user4"],
+      votePower: 2,
     },
     user3: {
       userId: "user3",
       vote: 2,
       delegateId: "user2",
       delegateMap: ["user2", "user4"],
+      votePower: 1,
     },
     user4: {
       userId: "user4",
       vote: 2,
+      votePower: 3,
     },
   },
 };
@@ -155,22 +165,26 @@ export const noVoteDefaultStateResults: AlgoReturnValue = {
     user1: {
       userId: "user1",
       vote: 0,
+      votePower: 1,
     },
     user2: {
       userId: "user2",
       vote: 2,
       delegateId: "user4",
       delegateMap: ["user4"],
+      votePower: 2,
     },
     user3: {
       userId: "user3",
       vote: 2,
       delegateId: "user2",
       delegateMap: ["user2", "user4"],
+      votePower: 1,
     },
     user4: {
       userId: "user4",
       vote: 2,
+      votePower: 3,
     },
   },
 };
@@ -204,22 +218,26 @@ export const noVoteDelegateResults: AlgoReturnValue = {
     user1: {
       userId: "user1",
       vote: 1,
+      votePower: 1,
     },
     user2: {
       userId: "user2",
       vote: 0,
       delegateId: "user4",
       delegateMap: ["user4"],
+      votePower: 2,
     },
     user3: {
       userId: "user3",
       vote: 0,
       delegateId: "user2",
       delegateMap: ["user2", "user4"],
+      votePower: 1,
     },
     user4: {
       userId: "user4",
       vote: 0,
+      votePower: 3,
     },
   },
 };
@@ -282,62 +300,73 @@ export const complexVoteResults: AlgoReturnValue = {
     user1: {
       userId: "user1",
       vote: 1,
+      votePower: 2,
     },
     user2: {
       userId: "user2",
       delegateId: "user4",
       delegateMap: ["user4"],
       vote: 0,
+      votePower: 2,
     },
     user3: {
       userId: "user3",
       delegateId: "user2",
       delegateMap: ["user2", "user4"],
       vote: 0,
+      votePower: 1,
     },
     user4: {
       userId: "user4",
       vote: 0,
+      votePower: 3,
     },
     user5: {
       userId: "user5",
       vote: 2,
+      votePower: 6,
     },
     user6: {
       userId: "user6",
       delegateId: "user5",
       delegateMap: ["user5"],
       vote: 2,
+      votePower: 3,
     },
     user7: {
       userId: "user7",
       delegateId: "user6",
       delegateMap: ["user6", "user5"],
       vote: 2,
+      votePower: 2,
     },
     user8: {
       userId: "user8",
       delegateId: "user7",
       delegateMap: ["user7", "user6", "user5"],
       vote: 2,
+      votePower: 1,
     },
     user9: {
       userId: "user9",
       delegateId: "user5",
       delegateMap: ["user5"],
       vote: 2,
+      votePower: 2,
     },
     user10: {
       userId: "user10",
       delegateId: "user9",
       delegateMap: ["user9", "user5"],
       vote: 2,
+      votePower: 1,
     },
     user11: {
       userId: "user11",
       delegateId: "user1",
       delegateMap: ["user1"],
       vote: 1,
+      votePower: 1,
     },
   },
 };
