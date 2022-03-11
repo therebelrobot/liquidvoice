@@ -12,6 +12,8 @@ export interface UserVote {
 interface EnrichedUserVote extends UserVote {
   // order implies the level of delegation
   delegateMap?: string[];
+  // unordered list of people delegating to this person
+  delegateFor?: string[];
   votePower?: number;
 }
 
@@ -129,6 +131,9 @@ export const resolveVotes = (userVotes: UserVote[]): AlgoReturnValue => {
       (v) => v.delegateMap && v.delegateMap.includes(userVote.userId)
     );
     thisVote.votePower = usersListingAsDelegate.length + 1;
+    if (usersListingAsDelegate.length > 0) {
+      thisVote.delegateFor = usersListingAsDelegate.map((v) => v.userId);
+    }
     votesMap.set(userVote.userId, thisVote);
   }
   return {
