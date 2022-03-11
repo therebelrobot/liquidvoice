@@ -9,9 +9,10 @@ export interface UserVote {
   delegateId?: string;
 }
 
-interface UserVoteWithDelegateMap extends UserVote {
+interface EnrichedUserVote extends UserVote {
   // order implies the level of delegation
   delegateMap?: string[];
+  votePower?: number;
 }
 
 export interface FinalTally {
@@ -20,20 +21,20 @@ export interface FinalTally {
 export interface AlgoReturnValue {
   finalTally: FinalTally;
   votes: {
-    [userId: string]: UserVoteWithDelegateMap;
+    [userId: string]: EnrichedUserVote;
   };
 }
 
 const onlyUnique = (value: any, index: number | string, self: any[]) =>
   self.indexOf(value) === index;
 
-export const algo = (userVotes: UserVote[]): AlgoReturnValue => {
+export const resolveVotes = (userVotes: UserVote[]): AlgoReturnValue => {
   // console.log("running");
-  const votesMap = new Map<string, UserVoteWithDelegateMap>();
+  const votesMap = new Map<string, EnrichedUserVote>();
   const finalVotesMap = new Map<number, string[]>();
   const proxyMap = new Map<string, string[]>();
   for (const userVote of userVotes) {
-    const enrichedUserVote: UserVoteWithDelegateMap = { ...userVote };
+    const enrichedUserVote: EnrichedUserVote = { ...userVote };
     if (userVote.vote !== undefined) {
       const vote = userVote.vote;
       const currentVotes = finalVotesMap.get(vote) || [];
@@ -48,8 +49,11 @@ export const algo = (userVotes: UserVote[]): AlgoReturnValue => {
     } else {
       const currentVotes = finalVotesMap.get(0) || [];
       currentVotes.push(userVote.userId);
+      enrichedUserVote.vote = 0;
+      enrichedUserVote.votePower = 1;
       finalVotesMap.set(0, currentVotes);
     }
+    enrichedUserVote.votePower = 1;
     votesMap.set(userVote.userId, enrichedUserVote);
   }
   const refinedProxies = new Map<string, string[]>();
@@ -63,7 +67,16 @@ export const algo = (userVotes: UserVote[]): AlgoReturnValue => {
         refinedProxies.set(proxyId, refinedVoters);
         for (const voterId of voterIds) {
           const thisVote = votesMap.get(voterId);
-          thisVote.delegateMap = [...(thisVote.delegateMap || []), proxyId];
+          const thisProxy = votesMap.get(proxyId);
+          thisVote.delegateMap = [
+            ...(thisVote.delegateMap || []),
+            proxyId,
+            ...(thisProxy.delegateMap || []),
+          ];
+          thisProxy.votePower = thisProxy.votePower || 1;
+          thisProxy.votePower += thisVote.delegateMap.length;
+          votesMap.set(voterId, thisVote);
+          votesMap.set(proxyId, thisProxy);
         }
         hasProxy = true;
       }
@@ -94,7 +107,16 @@ export const algo = (userVotes: UserVote[]): AlgoReturnValue => {
     for (const voterId of thisDelegateVoterIds) {
       const thisVote = votesMap.get(voterId);
       if (!(thisVote.delegateMap || []).includes(delegateId)) {
-        thisVote.delegateMap = [...(thisVote.delegateMap || []), delegateId];
+        const thisProxy = votesMap.get(delegateId);
+        thisVote.delegateMap = [
+          ...(thisVote.delegateMap || []),
+          delegateId,
+          ...(thisProxy.delegateMap || []),
+        ];
+        thisProxy.votePower = thisProxy.votePower || 1;
+        thisProxy.votePower += thisVote.delegateMap.length;
+        votesMap.set(voterId, thisVote);
+        votesMap.set(delegateId, thisProxy);
       }
       if (typeof thisVote.vote === "undefined") {
         thisVote.vote = thisDelegateVote.vote || 0;
