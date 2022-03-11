@@ -1,0 +1,36 @@
+{
+  "name": "@liquidvoice/api",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Aster Haven <asterhaven@pm.me> (@therebelrobot)",
+  "homepage": "https://github.com/therebelrobot/liquidvoice#readme",
+  "license": "MIT",
+  "main": "lib/api.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.yarnpkg.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/therebelrobot/liquidvoice.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/therebelrobot/liquidvoice/issues"
+  },
+  "dependencies": {
+    "sequelize": "^6.17.0"
+  },
+  "devDependencies": {
+    "sqlite": "^4.0.25",
+    "sqlite3": "^5.0.2"
+  }
+}
